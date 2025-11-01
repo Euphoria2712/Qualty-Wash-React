@@ -23,7 +23,7 @@ interface DashboardProps {
   navigateTo: (view: "dashboard" | "tienda" | "perfil") => void;
 }
 
-const DashboardContent = ({ user, onLogout, navigateTo }: DashboardProps) => {
+const Carrito = ({ user, onLogout, navigateTo }: DashboardProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartItems, setCartItems] = useState<Producto[]>([]);
@@ -155,4 +155,4 @@ const DashboardContent = ({ user, onLogout, navigateTo }: DashboardProps) => {
   );
 };
 
-export default DashboardContent;
+export default Carrito;
