@@ -1,4 +1,4 @@
-/* ===== CONTENEDOR PRINCIPAL DE LA TIENDA ===== */
+
 .tienda-container {
   min-height: calc(100vh - 80px);
   padding: 40px 20px;
@@ -27,7 +27,7 @@
   color: #7f8c8d;
 }
 
-/* ===== SECCIÓN DE PRODUCTOS ===== */
+
 .productos-limpieza {
   max-width: 1400px;
   margin: 0 auto;
@@ -56,7 +56,7 @@
   border-radius: 2px;
 }
 
-/* ===== GRID DE PRODUCTOS ===== */
+
 .lista-productos {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -64,7 +64,7 @@
   padding: 20px 0;
 }
 
-/* ===== TARJETA DE PRODUCTO ===== */
+
 .producto-card {
   background: white;
   border-radius: 16px;
@@ -148,7 +148,7 @@
   transform: translateY(-1px);
 }
 
-/* ===== SECCIÓN DE SERVICIOS ===== */
+
 .servicios-section {
   max-width: 1100px;
   margin: 60px auto;
@@ -194,7 +194,7 @@
   box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
 }
 
-/* ===== ESTADO VACÍO ===== */
+
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -211,7 +211,7 @@
   margin-bottom: 30px;
 }
 
-/* ===== ANIMACIONES ===== */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -234,7 +234,7 @@
   }
 }
 
-/* ===== RESPONSIVE ===== */
+
 @media (max-width: 768px) {
   .tienda-header h1 {
     font-size: 28px;

@@ -11,7 +11,7 @@ interface UserProfile {
 interface PerfilProps {
   user: UserProfile;
   onLogout: () => void;
-  navigateTo: (view: "dashboard" | "tienda" | "perfil") => void;
+  navigateTo: (view: "dashboard" | "tienda" | "perfil" | "contacto") => void;
 }
 
 const Perfil = ({ user, onLogout, navigateTo }: PerfilProps) => {
@@ -35,6 +35,7 @@ const Perfil = ({ user, onLogout, navigateTo }: PerfilProps) => {
         onLogout={onLogout}
         navigateTo={navigateTo}
         showCart={false}
+        user={user}
       />
 
       <main id="main-content">

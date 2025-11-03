@@ -3,6 +3,7 @@ import AuthFlow from "./VistasController";
 import Dashboard from "./Dashboard";
 import Tienda from "./Carrito";
 import Perfil from "./Perfil";
+import Contacto from "./Contacto";
 
 interface UserProfile {
   name: string | null;
@@ -10,7 +11,7 @@ interface UserProfile {
   isLoggedIn: boolean;
 }
 
-type AppView = "auth" | "dashboard" | "tienda" | "perfil";
+type AppView = "auth" | "dashboard" | "tienda" | "perfil" | "contacto";
 
 function App() {
   const [user, setUser] = useState<UserProfile>({
@@ -35,7 +36,7 @@ function App() {
     setCurrentView("auth");
   };
 
-  const navigateTo = (view: "dashboard" | "tienda" | "perfil") => {
+  const navigateTo = (view: "dashboard" | "tienda" | "perfil" | "contacto") => {
     setCurrentView(view);
   };
 
@@ -68,6 +69,12 @@ function App() {
     if (currentView === "perfil" && user.name && user.email) {
       return (
         <Perfil user={user} onLogout={handleLogout} navigateTo={navigateTo} />
+      );
+    }
+
+    if (currentView === "contacto" && user.name && user.email) {
+      return (
+        <Contacto user={user} onLogout={handleLogout} navigateTo={navigateTo} />
       );
     }
 

@@ -221,7 +221,6 @@ footer p {
   }
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .welcome-section h1 {
     font-size: 32px;

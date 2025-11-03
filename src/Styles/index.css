@@ -1,4 +1,4 @@
-/* ===== RESET Y ESTILOS GLOBALES ===== */
+
 * {
   margin: 0;
   padding: 0;
@@ -28,7 +28,7 @@ body {
   padding: 0;
 }
 
-/* ===== MEJORAS DE ACCESIBILIDAD ===== */
+
 a {
   text-decoration: none;
   color: inherit;
@@ -45,7 +45,7 @@ img {
   display: block;
 }
 
-/* ===== SCROLLBAR PERSONALIZADA (opcional) ===== */
+
 ::-webkit-scrollbar {
   width: 10px;
 }

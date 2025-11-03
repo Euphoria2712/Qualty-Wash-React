@@ -20,7 +20,7 @@ interface UserProfile {
 interface DashboardProps {
   user: UserProfile;
   onLogout: () => void;
-  navigateTo: (view: "dashboard" | "tienda" | "perfil") => void;
+  navigateTo: (view: "dashboard" | "tienda" | "perfil" | "contacto")  => void;
 }
 
 const Carrito = ({ user, onLogout, navigateTo }: DashboardProps) => {
@@ -69,6 +69,7 @@ const Carrito = ({ user, onLogout, navigateTo }: DashboardProps) => {
         onLogout={onLogout}
         navigateTo={navigateTo}
         showCart={true}
+        user={user}
       />
 
       <main id="main-content">

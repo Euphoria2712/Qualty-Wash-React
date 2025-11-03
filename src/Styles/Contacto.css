@@ -1,5 +1,4 @@
-
-.perfil-contenedor {
+.contacto-contenedor {
   min-height: calc(100vh - 80px);
   padding: 60px 20px;
   background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
@@ -10,7 +9,7 @@
   animation: fadeIn 0.8s ease;
 }
 
-.perfil-contenedor h1 {
+.contacto-contenedor h1 {
   font-size: 38px;
   color: #2c3e50;
   margin-bottom: 40px;
@@ -19,21 +18,20 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.perfil-card {
+.contacto-card {
   background: white;
   border-radius: 20px;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
   padding: 50px 40px;
-  max-width: 500px;
+  max-width: 600px;
   width: 100%;
-  text-align: center;
   animation: slideInUp 0.8s ease;
   border: 3px solid transparent;
   background-clip: padding-box;
   position: relative;
 }
 
-.perfil-card::before {
+.contacto-card::before {
   content: '';
   position: absolute;
   top: -3px;
@@ -45,36 +43,17 @@
   z-index: -1;
 }
 
-.perfil-avatar {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin: 0 auto 30px;
-  display: block;
-  border: 5px solid #667eea;
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  cursor: pointer;
-}
-
-.perfil-avatar:hover {
-  transform: scale(1.1) rotate(5deg);
-  box-shadow: 0 12px 32px rgba(102, 126, 234, 0.6);
-  border-color: #764ba2;
-}
-
-
-.perfil-card h2 {
+.contacto-card h2 {
   font-size: 26px;
   color: #2c3e50;
   margin-bottom: 30px;
   font-weight: 700;
+  text-align: center;
   position: relative;
   padding-bottom: 15px;
 }
 
-.perfil-card h2::after {
+.contacto-card h2::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -86,51 +65,88 @@
   border-radius: 2px;
 }
 
-.datos-usuario {
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  padding: 25px;
+.mensaje-exito {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  padding: 15px;
   border-radius: 12px;
-  margin-bottom: 30px;
-  text-align: left;
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+  animation: slideInUp 0.5s ease;
 }
 
-.datos-usuario p {
-  font-size: 17px;
-  color: #495057;
-  margin: 15px 0;
-  padding: 12px 15px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+.formulario-contacto {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.datos-usuario p:hover {
-  transform: translateX(5px);
-  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2);
+.form-group {
+  display: flex;
+  flex-direction: column;
 }
 
-.datos-usuario strong {
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
   color: #2c3e50;
-  font-weight: 700;
-  margin-right: 10px;
-  display: inline-block;
-  min-width: 80px;
+  font-weight: 600;
+  font-size: 15px;
 }
 
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-group select {
+  cursor: pointer;
+}
+
+.input-error {
+  border-color: #ff6b6b !important;
+}
+
+.error-message {
+  color: #ff6b6b;
+  font-size: 13px;
+  margin-top: 5px;
+  display: block;
+}
 
 .acciones {
   display: flex;
   gap: 15px;
-  margin-top: 30px;
+  margin-top: 10px;
   flex-wrap: wrap;
 }
 
-.boton-navegar,
-.boton-logout {
+.boton-enviar,
+.boton-cancelar {
   flex: 1;
-  min-width: 180px;
+  min-width: 200px;
   padding: 16px 25px;
   border: none;
   border-radius: 12px;
@@ -143,44 +159,39 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.boton-navegar {
+.boton-enviar {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
 }
 
-.boton-navegar:hover {
+.boton-enviar:disabled {
+  background: linear-gradient(135deg, #aaa 0%, #888 100%);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.boton-enviar:hover:not(:disabled) {
   transform: translateY(-4px) scale(1.02);
   box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
 }
 
-.boton-logout {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-  color: white;
-}
-
-.boton-logout:hover {
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 8px 20px rgba(238, 90, 111, 0.4);
-}
-
-.boton-navegar:active,
-.boton-logout:active {
+.boton-enviar:active:not(:disabled) {
   transform: translateY(-1px) scale(1);
 }
 
-
-.verified-badge {
-  display: inline-block;
-  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+.boton-cancelar {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
   color: white;
-  padding: 6px 15px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 600;
-  margin-top: 10px;
-  box-shadow: 0 3px 8px rgba(40, 167, 69, 0.3);
 }
 
+.boton-cancelar:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(108, 117, 125, 0.4);
+}
+
+.boton-cancelar:active {
+  transform: translateY(-1px) scale(1);
+}
 
 @keyframes fadeIn {
   from {
@@ -203,29 +214,26 @@
 }
 
 @media (max-width: 768px) {
-  .perfil-contenedor {
+  .contacto-contenedor {
     padding: 40px 15px;
   }
 
-  .perfil-contenedor h1 {
+  .contacto-contenedor h1 {
     font-size: 28px;
     margin-bottom: 30px;
   }
 
-  .perfil-card {
+  .contacto-card {
     padding: 35px 25px;
   }
 
-  .perfil-avatar {
-    width: 110px;
-    height: 110px;
-  }
-
-  .perfil-card h2 {
+  .contacto-card h2 {
     font-size: 22px;
   }
 
-  .datos-usuario p {
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
     font-size: 15px;
   }
 
@@ -233,8 +241,8 @@
     flex-direction: column;
   }
 
-  .boton-navegar,
-  .boton-logout {
+  .boton-enviar,
+  .boton-cancelar {
     width: 100%;
     min-width: auto;
   }

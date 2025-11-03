@@ -1,9 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Carrito from "../Componentes/Carrito";
-import React from "react";
 import { describe, expect, test, vi } from "vitest";
 
-// Simulamos el alert del navegador
 global.alert = vi.fn();
 
 describe("Carrito Component", () => {

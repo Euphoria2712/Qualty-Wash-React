@@ -1,6 +1,13 @@
 import React from "react";
 import "../Styles/Header.css";
 
+interface UserProfile {
+  name: string | null;
+  email: string | null;
+  isLoggedIn: boolean;
+}
+
+
 interface HeaderProps {
   isMenuOpen: boolean;
   toggleMenu: () => void;
@@ -8,9 +15,11 @@ interface HeaderProps {
   toggleCart: (e: React.MouseEvent) => void;
   cartCount: number;
   onLogout: () => void;
-  navigateTo?: (view: "dashboard" | "tienda" | "perfil") => void;
+  navigateTo?: (view: "dashboard" | "tienda" | "perfil" | "contacto") => void;
   showCart?: boolean;
+  user?: UserProfile;
 }
+
 
 const Header = ({
   isMenuOpen,
@@ -20,6 +29,7 @@ const Header = ({
   onLogout,
   navigateTo,
   showCart = true,
+  user
 }: HeaderProps) => {
   const handleNavigateToTienda = () => {
     if (navigateTo) {
@@ -38,6 +48,13 @@ const Header = ({
   const handleNavigateToDashboard = () => {
     if (navigateTo) {
       navigateTo("dashboard");
+    }
+    toggleMenu();
+  };
+
+  const handleNavigateToContacto = () => {
+    if (navigateTo) {
+      navigateTo("contacto");
     }
     toggleMenu();
   };
@@ -86,7 +103,7 @@ const Header = ({
             alt="Foto de Usuario"
             className="user-avatar"
           />
-          <span className="user-name">Nombre de Usuario</span>
+          <span className="user-name"> {user?.name} </span>
         </div>
         <nav className="nav-links">
           <ul>
@@ -104,6 +121,11 @@ const Header = ({
               <a href="#" onClick={handleNavigateToPerfil}>
                 👤 Perfil
               </a>
+            </li>
+            <li>
+              <a href="#" onClick={handleNavigateToContacto}>
+                📞 Contacto
+              </a>  
             </li>
             <li>
               <a href="#" id="logout-btn" onClick={onLogout}>
