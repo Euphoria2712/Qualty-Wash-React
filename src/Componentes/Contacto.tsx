@@ -17,9 +17,9 @@ interface ContactoProps {
 const Contacto = ({ user, onLogout, navigateTo }: ContactoProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
-    nombre:  "",
+    nombre: user?.name || "",
     rut: "",
-    email:  "",
+    email: user?.email || "",
     asunto: "",
     contexto: ""
   });

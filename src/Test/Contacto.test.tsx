@@ -24,7 +24,7 @@ describe("Contacto Component", () => {
     vi.clearAllMocks();
   });
 
-  // ========== TEST 1: RENDERIZADO ==========
+  //Test 1 renderiza las pantalla
   describe("Renderizado", () => {
     test("renderiza correctamente el componente", () => {
       render(
@@ -76,7 +76,7 @@ describe("Contacto Component", () => {
     });
   });
 
-  // ========== TEST 2: VALIDACIÓN DE CAMPOS VACÍOS ==========
+  //  Test 2 validación de campos vacíos
   describe("Validación de campos vacíos", () => {
     test("muestra error cuando el nombre está vacío", async () => {
       render(
@@ -176,7 +176,7 @@ describe("Contacto Component", () => {
     });
   });
 
-  // ========== TEST 3: VALIDACIÓN DE CONTEXTO (MIN 20 CARACTERES) ==========
+  // Test 3 validacion de la longitud del contexto
   describe("Validación de longitud de contexto", () => {
     test("muestra error cuando el contexto tiene menos de 20 caracteres", async () => {
       render(
@@ -234,7 +234,7 @@ describe("Contacto Component", () => {
     });
   });
 
-  // ========== TEST 4: VALIDACIÓN DE RUT ==========
+  // Test 4 validación de RUT
   describe("Validación de RUT", () => {
     test("muestra error cuando el RUT es inválido", async () => {
       render(
@@ -252,7 +252,7 @@ describe("Contacto Component", () => {
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(screen.getByText("RUT inválido")).toBeInTheDocument();
+        expect(screen.getByText(/RUT inválido/i)).toBeInTheDocument();
       });
     });
 
@@ -287,7 +287,7 @@ describe("Contacto Component", () => {
     });
   });
 
-  // ========== TEST 5: VALIDACIÓN DE EMAIL ==========
+  // Test 5 Validacion del email
   describe("Validación de email", () => {
     test("muestra error cuando el email es inválido", async () => {
       render(
@@ -310,7 +310,7 @@ describe("Contacto Component", () => {
     });
   });
 
-  // ========== TEST 6: FUNCIONALIDAD DEL BOTÓN ==========
+  // Test 6 funcionalidad del boton enviar
   describe("Funcionalidad del botón de enviar", () => {
     test("envía el formulario cuando todos los campos son válidos", async () => {
       const consoleSpy = vi.spyOn(console, "log");
@@ -395,7 +395,7 @@ describe("Contacto Component", () => {
     });
   });
 
-  // ========== TEST 7: BOTÓN CANCELAR ==========
+  // Test 7 funcionalidad del boton cancelar
   describe("Funcionalidad del botón cancelar", () => {
     test("navega al dashboard cuando se hace clic en cancelar", () => {
       render(
@@ -413,7 +413,7 @@ describe("Contacto Component", () => {
     });
   });
 
-  // ========== TEST 8: LIMPIEZA DE ERRORES ==========
+  // Test 8 limpieza de errores al escribir
   describe("Limpieza de errores al escribir", () => {
     test("limpia el error del nombre cuando el usuario empieza a escribir", async () => {
       render(
