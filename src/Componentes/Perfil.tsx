@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUserById, getUserByEmail } from "../services/userService";
+import { getUserEmail } from "../utils/adminUtils";
 import Header from "./Header";
 import "../Styles/Perfil.css";
 
@@ -8,18 +10,58 @@ interface UserProfile {
   isLoggedIn: boolean;
 }
 
+type AppView = "dashboard" | "tienda" | "perfil" | "contacto" | "gestionProductos";
+
 interface PerfilProps {
   user: UserProfile;
   onLogout: () => void;
-  navigateTo: (view: "dashboard" | "tienda" | "perfil" | "contacto") => void;
+  navigateTo: (view: AppView) => void;
 }
 
 const Perfil = ({ user, onLogout, navigateTo }: PerfilProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const userName = user.name || "N/A";
-  const userEmail = user.email || "N/A";
+  const [displayName, setDisplayName] = useState<string | null>(user.name);
+  const [displayEmail, setDisplayEmail] = useState<string | null>(user.email);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+  useEffect(() => {
+    const idStr = localStorage.getItem("userId");
+    if (idStr) {
+      const id = Number(idStr);
+      if (!Number.isNaN(id)) {
+        getUserById(id)
+          .then((u) => {
+            const name = [u.nombre, u.apellido].filter(Boolean).join(" ");
+            setDisplayName(name || u.nombre || user.name);
+            setDisplayEmail(u.email || user.email);
+          })
+          .catch(() => {
+            const email = getUserEmail();
+            setDisplayName(email || user.name);
+            setDisplayEmail(email || user.email);
+          });
+        return;
+      }
+    }
+
+    const email = getUserEmail();
+    if (email) {
+      getUserByEmail(email)
+        .then((u) => {
+          const name = [u.nombre, u.apellido].filter(Boolean).join(" ");
+          setDisplayName(name || u.nombre || user.name);
+          setDisplayEmail(u.email || user.email);
+        })
+        .catch(() => {
+          setDisplayName(email || user.name);
+          setDisplayEmail(email || user.email);
+        });
+      return;
+    }
+
+    setDisplayName(user.name);
+    setDisplayEmail(user.email);
+  }, [user.name, user.email]);
 
   return (
     <>
@@ -53,10 +95,10 @@ const Perfil = ({ user, onLogout, navigateTo }: PerfilProps) => {
 
             <div className="datos-usuario">
               <p>
-                <strong>Nombre:</strong> {userName}
+                <strong>Nombre:</strong> {displayName || "N/A"}
               </p>
               <p>
-                <strong>Correo Electrónico:</strong> {userEmail}
+                <strong>Correo Electrónico:</strong> {displayEmail || "N/A"}
               </p>
             </div>
 

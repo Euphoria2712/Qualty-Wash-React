@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Header from "./Header";
 import "../Styles/Contacto.css";
+import { crearContacto } from "../services/contactoService";
 
 interface UserProfile {
   name: string | null;
@@ -8,10 +9,12 @@ interface UserProfile {
   isLoggedIn: boolean;
 }
 
+type AppView = "dashboard" | "tienda" | "perfil" | "contacto" | "gestionProductos";
+
 interface ContactoProps {
   user: UserProfile;
   onLogout: () => void;
-  navigateTo: (view: "dashboard" | "tienda" | "perfil" | "contacto") => void;
+  navigateTo: (view: AppView) => void;
 }
 
 const Contacto = ({ user, onLogout, navigateTo }: ContactoProps) => {
@@ -20,6 +23,7 @@ const Contacto = ({ user, onLogout, navigateTo }: ContactoProps) => {
     nombre: user?.name || "",
     rut: "",
     email: user?.email || "",
+    telefono: "",
     asunto: "",
     contexto: ""
   });
@@ -69,6 +73,12 @@ const Contacto = ({ user, onLogout, navigateTo }: ContactoProps) => {
       newErrors.email = "Email inválido";
     }
 
+    if (!formData.telefono.trim()) {
+      newErrors.telefono = "El teléfono es obligatorio";
+    } else if (!/^\+?\d[\d\s-]{6,}$/.test(formData.telefono.trim())) {
+      newErrors.telefono = "Teléfono inválido";
+    }
+
     if (!formData.asunto.trim()) {
       newErrors.asunto = "El asunto es obligatorio";
     }
@@ -97,29 +107,42 @@ const Contacto = ({ user, onLogout, navigateTo }: ContactoProps) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
 
     setIsSubmitting(true);
-
-    setTimeout(() => {
-      console.log("Formulario enviado:", formData);
-      setIsSubmitting(false);
+    try {
+      const mensajeCompuesto = `Asunto: ${formData.asunto.trim()} | RUT: ${formData.rut.trim()}\n${formData.contexto.trim()}`;
+      await crearContacto({
+        nombre: formData.nombre.trim(),
+        email: formData.email.trim(),
+        telefono: formData.telefono.trim(),
+        mensaje: mensajeCompuesto,
+      });
       setSubmitSuccess(true);
-      
+      setFormData({
+        nombre: user?.name || "",
+        rut: "",
+        email: user?.email || "",
+        telefono: "",
+        asunto: "",
+        contexto: "",
+      });
       setTimeout(() => {
-        setFormData({
-          nombre: "",
-          rut: "",
-          email:  "",
-          asunto: "",
-          contexto: ""
-        });
         setSubmitSuccess(false);
       }, 3000);
-    }, 1500);
+    } catch (err) {
+      const status = (err as Error & { status?: number }).status;
+      alert(
+        status
+          ? `No se pudo enviar el formulario (código: ${status}).`
+          : `No se pudo enviar el formulario.`
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -198,6 +221,22 @@ const Contacto = ({ user, onLogout, navigateTo }: ContactoProps) => {
                 />
                 {errors.email && (
                   <span className="error-message">{errors.email}</span>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="telefono">Teléfono *</label>
+                <input
+                  type="tel"
+                  id="telefono"
+                  name="telefono"
+                  value={formData.telefono}
+                  onChange={handleChange}
+                  className={errors.telefono ? "input-error" : ""}
+                  placeholder="+56 9 1234 5678"
+                />
+                {errors.telefono && (
+                  <span className="error-message">{errors.telefono}</span>
                 )}
               </div>
 

@@ -46,8 +46,8 @@
 }
 
 .perfil-avatar {
-  width: 140px;
-  height: 140px;
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
   object-fit: cover;
   margin: 0 auto 30px;

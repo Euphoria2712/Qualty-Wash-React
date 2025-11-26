@@ -2,6 +2,8 @@ import React, { useState, useMemo } from "react";
 import Header from "./Header";
 import ProductCarousel from "./Productos";
 import "../Styles/Tienda.css";
+import { crearVenta } from "../services/ventasService";
+import type { VentaPayload } from "../services/ventasService";
 
 interface Producto {
   id: number;
@@ -17,10 +19,12 @@ interface UserProfile {
   isLoggedIn: boolean;
 }
 
+type AppView = "dashboard" | "tienda" | "perfil" | "contacto" | "gestionProductos";
+
 interface DashboardProps {
   user: UserProfile;
   onLogout: () => void;
-  navigateTo: (view: "dashboard" | "tienda" | "perfil" | "contacto")  => void;
+  navigateTo: (view: AppView) => void;
 }
 
 const Carrito = ({ user, onLogout, navigateTo }: DashboardProps) => {
@@ -125,16 +129,53 @@ const Carrito = ({ user, onLogout, navigateTo }: DashboardProps) => {
 
             <button
               className="comprar-btn"
-              onClick={() => {
-                alert(
-                  `¡Gracias por tu compra!\n\nHas adquirido ${
-                    cartItems.length
-                  } producto${
-                    cartItems.length > 1 ? "s" : ""
-                  } por un total de $${total.toLocaleString("es-CL")}.`
-                );
-                setCartItems([]);
-                setIsCartOpen(false);
+              onClick={async () => {
+                const itemsMap = new Map<number, { cantidad: number; precioUnitario: number }>();
+                for (const item of cartItems) {
+                  const precioNum = parseFloat(item.precio.replace(/\./g, "").replace(/,/g, ""));
+                  const current = itemsMap.get(item.id);
+                  if (current) {
+                    current.cantidad += 1;
+                  } else {
+                    itemsMap.set(item.id, { cantidad: 1, precioUnitario: isNaN(precioNum) ? 0 : precioNum });
+                  }
+                }
+
+                const items = Array.from(itemsMap.entries()).map(([productoId, v]) => ({
+                  productoId,
+                  cantidad: v.cantidad,
+                  precioUnitario: v.precioUnitario,
+                }));
+
+                const idRaw = localStorage.getItem("userId");
+                const clienteIdDerived = idRaw ? Number(idRaw) : NaN;
+
+                try {
+                  for (const item of items) {
+                    const payload: VentaPayload = {
+                      productoId: item.productoId,
+                      clienteId: Number.isNaN(clienteIdDerived) ? 0 : clienteIdDerived,
+                      cantidad: item.cantidad,
+                      precioTotal: item.cantidad * item.precioUnitario,
+                      fechaVenta: new Date().toISOString(),
+                    };
+                    await crearVenta(payload);
+                  }
+                  alert(
+                    `¡Gracias por tu compra!\n\nSe registraron ${
+                      items.length
+                    } venta${items.length > 1 ? "s" : ""} por un total de $${total.toLocaleString("es-CL")}.`
+                  );
+                  setCartItems([]);
+                  setIsCartOpen(false);
+                } catch (err) {
+                  const status = (err as Error & { status?: number }).status;
+                  alert(
+                    status
+                      ? `No se pudo procesar la compra (código: ${status}).`
+                      : `No se pudo procesar la compra.`
+                  );
+                }
               }}
             >
               Finalizar Compra

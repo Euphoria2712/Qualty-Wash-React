@@ -314,7 +314,7 @@ describe("Contacto Component", () => {
   describe("Funcionalidad del botón de enviar", () => {
     test("envía el formulario cuando todos los campos son válidos", async () => {
       const consoleSpy = vi.spyOn(console, "log");
-      (consoleSpy as any).mockImplementation(() => {});
+      consoleSpy.mockImplementation(() => {});
 
       render(
         <Contacto

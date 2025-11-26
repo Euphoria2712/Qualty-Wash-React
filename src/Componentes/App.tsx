@@ -1,9 +1,18 @@
 import React, { useState } from "react";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import AuthFlow from "./VistasController";
 import Dashboard from "./Dashboard";
 import Tienda from "./Carrito";
 import Perfil from "./Perfil";
 import Contacto from "./Contacto";
+import GestionProductos from "./GestionProductos";
+import { isUserAdmin } from "../utils/adminUtils";
 
 interface UserProfile {
   name: string | null;
@@ -11,7 +20,15 @@ interface UserProfile {
   isLoggedIn: boolean;
 }
 
-type AppView = "auth" | "dashboard" | "tienda" | "perfil" | "contacto";
+type AppView = "dashboard" | "tienda" | "perfil" | "contacto" | "gestionProductos";
+
+const ROUTES: Record<AppView, string> = {
+  dashboard: "/dashboard",
+  tienda: "/tienda",
+  perfil: "/perfil",
+  contacto: "/contacto",
+  gestionProductos: "/admin/productos",
+};
 
 function App() {
   const [user, setUser] = useState<UserProfile>({
@@ -19,69 +36,189 @@ function App() {
     email: null,
     isLoggedIn: false,
   });
-  const [currentView, setCurrentView] = useState<AppView>("auth");
+
+  return (
+    <BrowserRouter>
+      <AppRouter user={user} setUser={setUser} />
+    </BrowserRouter>
+  );
+}
+
+interface AppRouterProps {
+  user: UserProfile;
+  setUser: React.Dispatch<React.SetStateAction<UserProfile>>;
+}
+
+// Componente simple de ruta protegida
+interface ProtectedRouteProps {
+  user: UserProfile;
+  children: React.ReactElement;
+}
+
+function ProtectedRoute({ user, children }: ProtectedRouteProps) {
+  if (!user.isLoggedIn) {
+    return <Navigate to="/auth" replace />;
+  }
+  return children;
+}
+
+// Componente simple de ruta admin
+function AdminRoute({ user, children }: ProtectedRouteProps) {
+  if (!user.isLoggedIn) {
+    return <Navigate to="/auth" replace />;
+  }
+  
+  if (!isUserAdmin()) {
+    return <Navigate to={ROUTES.dashboard} replace />;
+  }
+  
+  return children;
+}
+
+function AppRouter({ user, setUser }: AppRouterProps) {
+  const navigate = useNavigate();
+
+  const navigateTo = (view: AppView) => {
+    navigate(ROUTES[view]);
+  };
 
   const handleRegisterSuccess = (name: string, email: string): void => {
-    setUser({ name: name, email: email, isLoggedIn: true });
-    setCurrentView("perfil");
+    console.log('Register success:', name, email);
+    
+    // Actualizar estado primero
+    const newUser = { name, email, isLoggedIn: true };
+    setUser(newUser);
+    
+    // Esperar un momento y navegar
+    setTimeout(() => {
+      navigate(ROUTES.perfil, { replace: true });
+    }, 50);
   };
 
   const handleLoginSuccess = (name: string, email: string): void => {
-    setUser({ name: name, email: email, isLoggedIn: true });
-    setCurrentView("dashboard");
+    console.log('Login success:', name, email);
+    
+    // Actualizar estado primero
+    const newUser = { name, email, isLoggedIn: true };
+    setUser(newUser);
+    
+    // Esperar un momento y navegar
+    setTimeout(() => {
+      navigate(ROUTES.dashboard, { replace: true });
+    }, 50);
   };
 
   const handleLogout = (): void => {
+    console.log('Logout');
+    localStorage.clear();
     setUser({ name: null, email: null, isLoggedIn: false });
-    setCurrentView("auth");
+    navigate("/auth", { replace: true });
   };
 
-  const navigateTo = (view: "dashboard" | "tienda" | "perfil" | "contacto") => {
-    setCurrentView(view);
-  };
-
-  const renderView = () => {
-    if (currentView === "auth" || !user.isLoggedIn) {
-      return (
-        <AuthFlow
-          onLoginSuccess={handleLoginSuccess}
-          onRegisterSuccess={handleRegisterSuccess}
-        />
-      );
-    }
-
-    if (currentView === "dashboard" && user.name && user.email) {
-      return (
-        <Dashboard
-          user={user}
-          onLogout={handleLogout}
-          navigateTo={navigateTo}
-        />
-      );
-    }
-
-    if (currentView === "tienda" && user.name && user.email) {
-      return (
-        <Tienda user={user} onLogout={handleLogout} navigateTo={navigateTo} />
-      );
-    }
-
-    if (currentView === "perfil" && user.name && user.email) {
-      return (
-        <Perfil user={user} onLogout={handleLogout} navigateTo={navigateTo} />
-      );
-    }
-
-    if (currentView === "contacto" && user.name && user.email) {
-      return (
-        <Contacto user={user} onLogout={handleLogout} navigateTo={navigateTo} />
-      );
-    }
-
-    return <div>Error de navegación o usuario no válido.</div>;
-  };
-
-  return renderView();
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          user.isLoggedIn ? (
+            <Navigate to={ROUTES.dashboard} replace />
+          ) : (
+            <Navigate to="/auth" replace />
+          )
+        }
+      />
+      
+      <Route
+        path="/auth"
+        element={
+          user.isLoggedIn ? (
+            <Navigate to={ROUTES.dashboard} replace />
+          ) : (
+            <AuthFlow
+              onLoginSuccess={handleLoginSuccess}
+              onRegisterSuccess={handleRegisterSuccess}
+            />
+          )
+        }
+      />
+      
+      <Route
+        path={ROUTES.dashboard}
+        element={
+          <ProtectedRoute user={user}>
+            <Dashboard
+              user={user}
+              onLogout={handleLogout}
+              navigateTo={navigateTo}
+            />
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path={ROUTES.tienda}
+        element={
+          <ProtectedRoute user={user}>
+            <Tienda 
+              user={user} 
+              onLogout={handleLogout} 
+              navigateTo={navigateTo} 
+            />
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path={ROUTES.perfil}
+        element={
+          <ProtectedRoute user={user}>
+            <Perfil 
+              user={user} 
+              onLogout={handleLogout} 
+              navigateTo={navigateTo} 
+            />
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path={ROUTES.contacto}
+        element={
+          <ProtectedRoute user={user}>
+            <Contacto
+              user={user}
+              onLogout={handleLogout}
+              navigateTo={navigateTo}
+            />
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path={ROUTES.gestionProductos}
+        element={
+          <AdminRoute user={user}>
+            <GestionProductos
+              user={user}
+              onLogout={handleLogout}
+              navigateTo={navigateTo}
+            />
+          </AdminRoute>
+        }
+      />
+      
+      <Route
+        path="*"
+        element={
+          user.isLoggedIn ? (
+            <Navigate to={ROUTES.dashboard} replace />
+          ) : (
+            <Navigate to="/auth" replace />
+          )
+        }
+      />
+    </Routes>
+  );
 }
 
 export default App;

@@ -56,7 +56,6 @@ describe("Carrito Component", () => {
   test("elimina un producto correctamente del carrito", async () => {
     renderCarrito();
 
-    const producto = productoMock;
     const component = screen.getByText(/no hay productos/i).closest("aside");
     expect(component).toBeTruthy();
 

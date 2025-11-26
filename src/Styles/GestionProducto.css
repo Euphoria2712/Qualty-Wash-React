@@ -1,0 +1,416 @@
+
+.fondo {
+  background-image: url("https://www.revistalimpiezas.es/wp-content/uploads/sites/4/2020/05/laundry-saloon-567951-1280-jpg-ok-900x600.jpg");
+  min-height: 100vh;
+  width: 100vw;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+
+.productos-container {
+  width: 100%;
+  max-width: 1200px;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  border-top: 5px solid #667eea;
+  padding: 30px;
+}
+
+.productos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.productos-header h1 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.boton-volver {
+  padding: 10px 20px;
+  border: 2px solid #667eea;
+  border-radius: 8px;
+  background-color: white;
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.boton-volver:hover {
+  background-color: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+
+.boton-nuevo {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.boton-nuevo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.mensaje-error-box {
+  background-color: #fff5f5;
+  border: 2px solid #dc3545;
+  color: #dc3545;
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.mensaje-exito-box {
+  background-color: #f5fff7;
+  border: 2px solid #28a745;
+  color: #28a745;
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.tabla-container {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.tabla-productos {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-productos thead {
+  background-color: #f8f9fa;
+}
+
+.tabla-productos th {
+  padding: 14px 18px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.tabla-productos tbody tr {
+  border-bottom: 1px solid #dee2e6;
+  transition: background-color 0.2s ease;
+}
+
+.tabla-productos tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.tabla-productos td {
+  padding: 14px 18px;
+  font-size: 14px;
+  color: #2c3e50;
+}
+
+.producto-nombre {
+  font-weight: 600;
+}
+
+.producto-precio {
+  color: #667eea;
+  font-weight: 600;
+}
+
+
+.acciones-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.boton-accion {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.boton-editar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+}
+
+.boton-editar:hover {
+  background-color: #5568d3;
+  transform: translateY(-1px);
+}
+
+.boton-eliminar {
+  background-color: #dc3545;
+  color: #fff;
+}
+
+.boton-eliminar:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+}
+
+.tabla-vacia {
+  padding: 40px;
+  text-align: center;
+  color: #6c757d;
+  font-size: 16px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+
+.modal-contenedor {
+  background-color: rgba(255, 255, 255, 0.98);
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-top: 5px solid #667eea;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-titulo {
+  margin: 0 0 25px 0;
+  color: #2c3e50;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+
+.modal-formulario {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-grupo {
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #2c3e50;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.input-campo {
+  padding: 14px 18px;
+  width: 100%;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.input-campo:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  outline: none;
+}
+
+.textarea-campo {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.modal-botones {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.boton-enviar {
+  flex: 1;
+  padding: 14px 25px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.boton-enviar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.boton-enviar:active {
+  transform: translateY(0);
+}
+
+.boton-cancelar {
+  flex: 1;
+  padding: 14px 25px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  color: #6c757d;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.boton-cancelar:hover {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+  transform: translateY(-2px);
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+.loading-text {
+  font-size: 20px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+@media (max-width: 768px) {
+  .productos-container {
+    padding: 20px;
+  }
+
+  .productos-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-left {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .productos-header h1 {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .boton-volver,
+  .boton-nuevo {
+    width: 100%;
+  }
+
+  .tabla-container {
+    overflow-x: auto;
+  }
+
+  .tabla-productos {
+    min-width: 600px;
+  }
+
+  .acciones-cell {
+    flex-direction: column;
+  }
+
+  .boton-accion {
+    width: 100%;
+  }
+
+  .modal-contenedor {
+    padding: 20px;
+  }
+
+  .modal-titulo {
+    font-size: 20px;
+  }
+
+  .modal-botones {
+    flex-direction: column;
+  }
+
+  .boton-enviar,
+  .boton-cancelar {
+    width: 100%;
+  }
+}
+.boton-accion {
+  background: linear-gradient(135deg, rgba(102,126,234,0.12) 0%, rgba(118,75,162,0.12) 100%);
+  color: #2c3e50;
+}
+
+.boton-accion:hover { filter: brightness(1.05); }
+
+.tabla-productos td, .tabla-productos th { vertical-align: middle; }

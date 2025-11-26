@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { isUserAdmin } from "../utils/adminUtils";
 import "../Styles/Header.css";
 
 interface UserProfile {
@@ -7,6 +8,7 @@ interface UserProfile {
   isLoggedIn: boolean;
 }
 
+type AppView = "dashboard" | "tienda" | "perfil" | "contacto" | "gestionProductos";
 
 interface HeaderProps {
   isMenuOpen: boolean;
@@ -15,11 +17,10 @@ interface HeaderProps {
   toggleCart: (e: React.MouseEvent) => void;
   cartCount: number;
   onLogout: () => void;
-  navigateTo?: (view: "dashboard" | "tienda" | "perfil" | "contacto") => void;
+  navigateTo?: (view: AppView) => void;
   showCart?: boolean;
   user?: UserProfile;
 }
-
 
 const Header = ({
   isMenuOpen,
@@ -31,6 +32,13 @@ const Header = ({
   showCart = true,
   user
 }: HeaderProps) => {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+
+    setIsAdmin(isUserAdmin());
+  }, [user]);
+
   const handleNavigateToTienda = () => {
     if (navigateTo) {
       navigateTo("tienda");
@@ -59,9 +67,16 @@ const Header = ({
     toggleMenu();
   };
 
+  const handleNavigateToGestionProductos = () => {
+    if (navigateTo) {
+      navigateTo("gestionProductos");
+    }
+    toggleMenu();
+  };
+
   return (
     <>
-      <header className="main-header">
+      <header className={isMenuOpen ? "main-header menu-open" : "main-header"}>
         <div className="user-profile-icon" onClick={toggleMenu}>
           <img
             src="https://distrimar.s3.amazonaws.com/static/apm/img/misc/default_user.png"
@@ -74,7 +89,7 @@ const Header = ({
 
         {showCart && (
           <div className="cart-icon-group">
-            <button id="cart-icon" onClick={toggleCart} className="cart-btn">
+            <button id="cart-icon" onClick={toggleCart} className="cart-btn" aria-label="Abrir carrito">
               <img
                 src="https://cdn-icons-png.flaticon.com/512/107/107831.png"
                 alt="Carrito de compras"
@@ -103,8 +118,9 @@ const Header = ({
             alt="Foto de Usuario"
             className="user-avatar"
           />
-          <span className="user-name"> {user?.name} </span>
+          <span className="user-name">{user?.name}</span>
         </div>
+
         <nav className="nav-links">
           <ul>
             <li>
@@ -127,6 +143,16 @@ const Header = ({
                 📞 Contacto
               </a>  
             </li>
+
+        
+            {isAdmin && (
+              <li className="admin-menu-item">
+                <a href="#" onClick={handleNavigateToGestionProductos}>
+                  🛠️ Gestión Productos
+                </a>
+              </li>
+            )}
+
             <li>
               <a href="#" id="logout-btn" onClick={onLogout}>
                 🚪 Cerrar Sesión

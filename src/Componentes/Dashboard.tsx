@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import { getUserById, getUserByEmail } from "../services/userService";
 import Header from "./Header";
+import { isUserAdmin, getUserEmail } from "../utils/adminUtils";
 import "../Styles/Dashboard.css";
 
 interface UserProfile {
@@ -8,16 +10,60 @@ interface UserProfile {
   isLoggedIn: boolean;
 }
 
+type AppView = "dashboard" | "tienda" | "perfil" | "contacto" | "gestionProductos";
+
 interface DashboardProps {
   user: UserProfile;
   onLogout: () => void;
-  navigateTo: (view: "dashboard" | "tienda" | "perfil" | "contacto") => void;
+  navigateTo: (view: AppView) => void;
 }
 
 const Dashboard = ({ user, onLogout, navigateTo }: DashboardProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [displayName, setDisplayName] = useState<string | null>(user.name);
+
+  useEffect(() => {
+    setIsAdmin(isUserAdmin());
+  }, []);
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
+  useEffect(() => {
+    if (!displayName) {
+      const idStr = localStorage.getItem("userId");
+      if (idStr) {
+        const id = Number(idStr);
+        if (!Number.isNaN(id)) {
+          getUserById(id)
+            .then((u) => {
+              const name = [u.nombre, u.apellido].filter(Boolean).join(" ");
+              setDisplayName(name || u.nombre || user.name);
+            })
+            .catch(() => {
+              const email = getUserEmail();
+              setDisplayName(email || user.name);
+            });
+          return;
+        }
+      }
+
+      const email = getUserEmail();
+      if (email) {
+        getUserByEmail(email)
+          .then((u) => {
+            const name = [u.nombre, u.apellido].filter(Boolean).join(" ");
+            setDisplayName(name || u.nombre || user.name);
+          })
+          .catch(() => {
+            setDisplayName(email || user.name);
+          });
+        return;
+      }
+
+      setDisplayName(user.name);
+    }
+  }, [displayName, user.name]);
 
   return (
     <>
@@ -38,9 +84,24 @@ const Dashboard = ({ user, onLogout, navigateTo }: DashboardProps) => {
 
       <main id="main-content">
         <section className="welcome-section">
-          <h1>¡Bienvenido a Quality Wash, {user.name}!</h1>
+          <h1>¡Bienvenido a Quality Wash, {displayName || "Usuario"}!</h1>
           <p>Tu solución confiable para el cuidado de tus prendas</p>
         </section>
+
+        {isAdmin && (
+          <section className="admin-panel-section">
+            <div className="admin-panel">
+              <h2>🛠️ Panel de Administración</h2>
+              <p>Tienes acceso a funciones administrativas</p>
+              <button 
+                onClick={() => navigateTo("gestionProductos")}
+                className="admin-button"
+              >
+                📦 Gestión de Productos
+              </button>
+            </div>
+          </section>
+        )}
 
         <section className="info-section">
           <h2 className="section-title">¿Quiénes Somos?</h2>
